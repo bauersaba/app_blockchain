@@ -38,10 +38,8 @@ class Blockchain {
   }
 
   String hash(Block block) {
-    var blockStr = block.toJson();
-    //var blockStr = JSON.encode(block.toJson());
-    var bytes = utf8.encoder(blockStr);
-    //var bytes = UTF8.encode(blockStr);
+    String blockStr = jsonEncode(block.toJson());
+    var bytes = Utf8Encoder().convert(blockStr);
     var converted = crypto.sha256.convert(bytes).bytes;
     return HEX.encode(converted);
   }
@@ -56,7 +54,8 @@ class Blockchain {
   }
 
   bool validProof(int lastProof, int proof) {
-    var guess = UTF8.encode("${lastProof}${proof}");
+    var guess = Utf8Encoder().convert("${lastProof}${proof}");
+    //var guess = UTF8.encode("${lastProof}${proof}");
     var guessHash = crypto.sha256.convert(guess).bytes;
     return HEX.encode(guessHash).substring(0, 4) == "0000";
   }
